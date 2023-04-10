@@ -95,13 +95,9 @@ $$A_{ij} = \exp(\frac{d_{ij}^2}{\sigma^2} )$$
 $$L = D^{-\frac{1}{2}}AD^{\frac{1}{2}}$$
 $$where \quad D_{ii} = \sum_jA_{jj}$$
 - To increase the weights of closest features and decrease the weights of features not so close to each other, we perform power iteration using the power matrix $P$
-$$
-P = ( I - \alpha L)^{-1}
-$$
+$$P = ( I - \alpha L)^{-1}$$
 - The new features $\tilde{z_i}$ are calculated as weighted sum of their neighbors
-$$
-\tilde{z_l} = \sum_j P_{ij} z_j
-$$
+$$\tilde{z_l} = \sum_j P_{ij} z_j$$
 
 Two fully connected classifiers are trained, which use the features extracted by the CNN backbone networks and regularized using the manifold smoothing process
 
@@ -109,27 +105,15 @@ Two fully connected classifiers are trained, which use the features extracted by
 
 - The first classifier $C_1$ is trained to predict the class labels of the input images. A standard cross entropy loss for classification is used to train this classifier.
 	- The loss function is given by:
-$$
-\text{L}_{\text{C}_1}(\text{x}_i, \text{y}_i; \text{W}_l, \theta ) = -ln(p(\text{y}_i | \tilde{z_l}), \text{W}_l)
-$$
-$$
-𝑊_l \text{ is the fully connected layer with softmax activation representing } C_1.
-$$ 
+$$\text{L}_{\text{C}_1}(\text{x}_i, \text{y}_i; \text{W}_l, \theta ) = -ln(p(\text{y}_i | \tilde{z_l}), \text{W}_l)$$
+$$𝑊_l \text{ is the fully connected layer with softmax activation representing } C_1.$$ 
 - The second classifier $C_2$ is utilized to provide a self-supervision type learning signal, where the rotation angle of each input image, (after being rotated by {0°, 90°,180°, 270°}) is predicted. This helps improve the learning signal and provides a certain degree of rotation invariance to the model.
 	- The loss function is given by:
-$$
-\text{L}_{\text{C}_2}(\text{x}_i, \text{y}_i; \text{W}_r, \theta ) = -ln(p(\text{r}_i | \tilde{z_i}), \text{W}_r)
-$$
-$$		
-   W_r \text{ is the fully connected layer with softmax activation representing } C_2
-$$
-$$
-r_i \text{ prediction of the rotation angle. }
-$$
+$$\text{L}_{\text{C}_2}(\text{x}_i, \text{y}_i; \text{W}_r, \theta ) = -ln(p(\text{r}_i | \tilde{z_i}), \text{W}_r)$$
+$$W_r \text{ is the fully connected layer with softmax activation representing } C_2$$
+$$r_i \text{ prediction of the rotation angle. }$$
 - The overall loss to be minimized is given by:
-$$
-argmin \sum_{i=1}^{128} \sum_{j=1}^{4} \text{L}_{\text{C}_1}(\text{x}_i, \text{y}_i; \text{W}_l, \theta ) + \text{L}_{\text{C}_2}(\text{x}_i, \text{r}_j; \text{W}_r, \theta )
-$$
+$$argmin \sum_{i=1}^{128} \sum_{j=1}^{4} \text{L}_{\text{C}_1}(\text{x}_i, \text{y}_i; \text{W}_l, \theta ) + \text{L}_{\text{C}_2}(\text{x}_i, \text{r}_j; \text{W}_r, \theta )$$
 ### 3.2 Episodic Finetuning
 
 ![episodic_flow](assets/episodic_flow.png)
@@ -150,19 +134,13 @@ $$
 - The matrix $Y$ is constructed using 
 	- The matrix $Y_s$ of size $(nk \times n)$ corresponding to the support set $S$, such that  $Y_{ij} = 1$ if $y_i = j$ else 0. Basically the for each row, the column corresponding to the correct label is set 1 and rest are zero.
 	- The matrix $O$ which is a matrix of zeros of size $(t \times n)$, where $t$ is the number of samples in $Q$
-$$
-Y = \frac{Y_s}{O}
-$$
+$$Y = \frac{Y_s}{O}$$
 - Label propagation iteratively determines the unknown labels for the union set $S \cup Q$ 
-$$
-F_{t+1} = \alpha L F_{t} + (1 - \alpha)Y
-$$
+$$F_{t+1} = \alpha L F_{t} + (1 - \alpha)Y$$
 - $L$ is the normalized similarity matrix, as defined in [[#3.1.1 Manifold Smoothing using RBF Feature Interpolation]]
 - $\alpha$ is the smoothing factor between 0 and 1. 
 - The sequence $F_t$ converges to 
-$$
-F^{*} = (I - \alpha L)^{-1}Y
-$$
+$$F^{*} = (I - \alpha L)^{-1}Y$$
 $$\text{ where } I \text{ is the identity matrix }$$
 
 Two fully connected classifiers are trained, which use the features extracted by the CNN backbone networks and regularized using the manifold smoothing process
@@ -170,18 +148,12 @@ Two fully connected classifiers are trained, which use the features extracted by
 #### 3.2.2 Linear Classifiers
 - The classifier $C'_1$ utilizes label propagation to compute the probabilities of the classes in the query set. The logits are converted to class probabilities using the SoftMax function. 
 	- The loss function is given by
-$$
-L_{C'_1}(x_i, y_i; \theta) = -ln(p(y_i | \tilde{z_l}, \tilde{Z}, \tilde{Y_s}))
-$$
+$$L_{C'_1}(x_i, y_i; \theta) = -ln(p(y_i | \tilde{z_l}, \tilde{Z}, \tilde{Y_s}))$$
 - Since the label propagation loss tends to favor mixing of features, impacting the discriminativeness of the feature representation, a second classifier $C'_2$ is trained with the standard cross entropy loss on the union $S \cup Q$ . This classifier is similar to the one used in pretraining and helps preserving the discriminativeness of the feature representation.
 	- The loss function is given by 
-$$
-L_{C'_2}(x_i, y_i; W_l, \theta) = -ln(p(y_i | \tilde{z_l}, W_l))
-$$
+$$L_{C'_2}(x_i, y_i; W_l, \theta) = -ln(p(y_i | \tilde{z_l}, W_l))$$
 - The overall loss to be minimized is the additive combination of the above: 
-$$
-argmin \left[\frac{1}{|Q|} \sum_{(x_i, y_i) \epsilon Q} L_{C'_1}(x_i, y_i; \theta) + \frac{1}{|S \cup Q|} \sum_{(x_i, y_i) \epsilon S \cup Q} \frac{1}{2} L_{C'_2}(x_i, y_i; W_l, \theta) \right] 
-$$
+$$argmin \left[\frac{1}{|Q|} \sum_{(x_i, y_i) \epsilon Q} L_{C'_1}(x_i, y_i; \theta) + \frac{1}{|S \cup Q|} \sum_{(x_i, y_i) \epsilon S \cup Q} \frac{1}{2} L_{C'_2}(x_i, y_i; W_l, \theta) \right]$$
 
 ## 4. Validation and Results
 
