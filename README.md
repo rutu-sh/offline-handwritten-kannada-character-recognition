@@ -90,16 +90,10 @@ Two different convolution neural networks were used, Conv4 and Resnet12
 - A smoothing function is applied to obtain $\tilde{z}$ which are forwarded to the fully connected layer for classification.
 - This smoothing consists of using a Gaussian similarity function centered at $z_i$ and evaluating the probability of other feature $z_j$ using L2 norm as distance function, $d_{ij}^2 = \lVert x \rVert_{2}^2$ and $\sigma  = Var(d_{ij}^2)$ as a measure of similarity/dissimilarity of different features. 
 - The similarity matrix $A$ is defined as 
-$$
-A_{ij} = \exp(\frac{d_{ij}^2}{\sigma^2} )
-$$
+$$A_{ij} = \exp(\frac{d_{ij}^2}{\sigma^2} )$$
 - To ensure convergence, we normalize this similarity matrix
-$$
-L = D^{-\frac{1}{2}}AD^{\frac{1}{2}}
-$$
-$$
-where \quad D_{ii} = \sum_jA_{jj}
-$$
+$$L = D^{-\frac{1}{2}}AD^{\frac{1}{2}}$$
+$$where \quad D_{ii} = \sum_jA_{jj}$$
 - To increase the weights of closest features and decrease the weights of features not so close to each other, we perform power iteration using the power matrix $P$
 $$
 P = ( I - \alpha L)^{-1}
