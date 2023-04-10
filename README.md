@@ -128,7 +128,7 @@ $$argmin \sum_{i=1}^{128} \sum_{j=1}^{4} \text{L}_{\text{C}_1}(\text{x}_i, \text
 - Each epoch in finetuning consists of generating an episode, calculating the loss obtained, and using backpropagation to adjust the weights accordingly.
 - Query set $Q$ consists of 15 samples and support set $S$ has $k$ example images. 
 - In each episode 5 classes are uniformly sampled without replacement.
-- RBF interpolation is done as defined in [[#3.1.1 Manifold Smoothing using RBF Feature Interpolation]]
+- RBF interpolation is done as defined in [[#3.1.1 Manifold Smoothing using RBF Feature Interpolation]] (section 3.1.1)[#311-manifold-smoothing-using-rbf-feature-interpolation]
 
 #### 3.2.1 Label Propagation
 - The prediction of labels for the query set $Q$ using label propagation is obtained using the similarity matrix that is equivalent to the one used in the manifold smoothing step.
