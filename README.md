@@ -16,9 +16,9 @@
 
 - Dataset consists of 47 classes representing each base character of Kannada Abiguda
 - Each class has 400 samples
-- 24 classes used as Training Set
-- 12 classes used as Test Set
-- 11 classes used as Validation Set
+- 24 classes used as Training Set (the base set)
+- 12 classes used as Test Set (the novel set)
+- 11 classes used as Validation Set (the validation set)
 - The images were rescaled to 84x84 pixels and converted to RGB.
 
 ### 1.1 The base set 
@@ -204,7 +204,6 @@ The hyperparameters are as given below
 ![conv4_5shot_finetuning_loss](assets/conv4_5shot_finetuning_loss.png)
 
 - comparing 1 and 5 shot finetuning results
-![[conv4_1and5_shot_comparison.png]]
 ![conv4_1and5_shot_comparison](assets/conv4_1and5_shot_comparison.png)
 
 
