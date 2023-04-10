@@ -113,6 +113,7 @@ $$\text{L}_{\text{C}_2}(\text{x}_i, \text{y}_i; \text{W}_r, \theta ) = -ln(p(\te
 $$W_r \text{ is the fully connected layer with softmax activation representing } C_2$$
 $$r_i \text{ prediction of the rotation angle. }$$
 - The overall loss to be minimized is given by:
+
 $$argmin \sum_{i=1}^{128} \sum_{j=1}^{4} \text{L}_{\text{C}_1}(\text{x}_i, \text{y}_i; \text{W}_l, \theta ) + \text{L}_{\text{C}_2}(\text{x}_i, \text{r}_j; \text{W}_r, \theta )$$
 ### 3.2 Episodic Finetuning
 
@@ -153,6 +154,7 @@ $$L_{C'_1}(x_i, y_i; \theta) = -ln(p(y_i | \tilde{z_l}, \tilde{Z}, \tilde{Y_s}))
 	- The loss function is given by 
 $$L_{C'_2}(x_i, y_i; W_l, \theta) = -ln(p(y_i | \tilde{z_l}, W_l))$$
 - The overall loss to be minimized is the additive combination of the above: 
+
 $$argmin \left[\frac{1}{|Q|} \sum_{(x_i, y_i) \epsilon Q} L_{C'_1}(x_i, y_i; \theta) + \frac{1}{|S \cup Q|} \sum_{(x_i, y_i) \epsilon S \cup Q} \frac{1}{2} L_{C'_2}(x_i, y_i; W_l, \theta) \right]$$
 
 ## 4. Validation and Results
