@@ -149,13 +149,19 @@ Two fully connected classifiers are trained, which use the features extracted by
 #### 3.2.2 Linear Classifiers
 - The classifier $C'_1$ utilizes label propagation to compute the probabilities of the classes in the query set. The logits are converted to class probabilities using the SoftMax function. 
 	- The loss function is given by
-$$L_{C'_1}(x_i, y_i; \theta) = -ln(p(y_i | \tilde{z_l}, \tilde{Z}, \tilde{Y_s}))$$
+$$
+L_{C'_1}(x_i, y_i; \theta) = -ln(p(y_i | \tilde{z_l}, \tilde{Z}, \tilde{Y_s}))
+$$
 - Since the label propagation loss tends to favor mixing of features, impacting the discriminativeness of the feature representation, a second classifier $C'_2$ is trained with the standard cross entropy loss on the union $S \cup Q$ . This classifier is similar to the one used in pretraining and helps preserving the discriminativeness of the feature representation.
 	- The loss function is given by 
-$$L_{C'_2}(x_i, y_i; W_l, \theta) = -ln(p(y_i | \tilde{z_l}, W_l))$$
+$$
+L_{C'_2}(x_i, y_i; W_l, \theta) = -ln(p(y_i | \tilde{z_l}, W_l))
+$$
 - The overall loss to be minimized is the additive combination of the above: 
 
-$$argmin \left[\frac{1}{|Q|} \sum_{(x_i, y_i) \epsilon Q} L_{C'_1}(x_i, y_i; \theta) + \frac{1}{|S \cup Q|} \sum_{(x_i, y_i) \epsilon S \cup Q} \frac{1}{2} L_{C'_2}(x_i, y_i; W_l, \theta) \right]$$
+$$
+argmin \left[\frac{1}{|Q|} \sum_{(x_i, y_i) \epsilon Q} L_{C'_1}(x_i, y_i; \theta) + \frac{1}{|S \cup Q|} \sum_{(x_i, y_i) \epsilon S \cup Q} \frac{1}{2} L_{C'_2}(x_i, y_i; W_l, \theta) \right]
+$$
 
 ## 4. Validation and Results
 
